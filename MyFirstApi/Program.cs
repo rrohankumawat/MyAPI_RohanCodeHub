@@ -29,7 +29,8 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = builder.Configuration.GetValue<string>("JWT:Issuer"),
         ValidAudience = builder.Configuration.GetValue<string>("JWT:Audience"),
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetValue<string>("JWT:Key")))
+        IssuerSigningKey = new SymmetricSecurityKey(Convert.FromHexString(builder.Configuration.GetValue<string>("JWT:Key"))),
+        TokenDecryptionKey = new SymmetricSecurityKey(Convert.FromHexString(builder.Configuration.GetValue<string>("JWT:Key"))),
     };
 });
 

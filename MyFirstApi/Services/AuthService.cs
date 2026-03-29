@@ -111,9 +111,11 @@ namespace MyFirstApi.Services
                 new Claim(ClaimTypes.NameIdentifier, dto.Id.ToString())
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("04b83dfe0e9dadbc32f4354525b521412f0527beff39812c0dcf602aa1b5a648"));
+            var key = new SymmetricSecurityKey(Convert.FromHexString("04b83dfe0e9dadbc32f4354525b521412f0527beff39812c0dcf602aa1b5a648"));
 
             var jwtHandler = new JwtSecurityTokenHandler();
+
+            var encryptionCredentials = new EncryptingCredentials(key, SecurityAlgorithms.Aes256KW, SecurityAlgorithms.Aes256CbcHmacSha512);
 
 
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -122,7 +124,8 @@ namespace MyFirstApi.Services
                 Expires = DateTime.UtcNow.AddMinutes(30),
                 Issuer = "rohan-client",
                 Audience = "rohan-backend",
-                SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature)
+                SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature),
+                EncryptingCredentials = encryptionCredentials
             };
 
             var token = jwtHandler.CreateToken(tokenDescriptor);
