@@ -113,19 +113,21 @@ namespace MyFirstApi.Services
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("04b83dfe0e9dadbc32f4354525b521412f0527beff39812c0dcf602aa1b5a648"));
 
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var jwtHandler = new JwtSecurityTokenHandler();
 
 
-            var token = new JwtSecurityToken(
-                issuer: "rohan-client",
-                audience: "rohan-backend",
-                claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(1),
-                signingCredentials: creds
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new System.Security.Claims.ClaimsIdentity(claims),
+                Expires = DateTime.UtcNow.AddMinutes(30),
+                Issuer = "rohan-client",
+                Audience = "rohan-backend",
+                SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature)
+            };
 
-                );
+            var token = jwtHandler.CreateToken(tokenDescriptor);
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return jwtHandler.WriteToken(token);
 
         }
 
