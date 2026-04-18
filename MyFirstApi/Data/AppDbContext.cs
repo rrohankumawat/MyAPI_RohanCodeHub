@@ -12,5 +12,6 @@ namespace MyFirstApi.Data
         public DbSet<User> AccountUsers { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Department> Departments { get; set; }
+        public DbSet<Salary> Salaries { get; set; }
     }
 }

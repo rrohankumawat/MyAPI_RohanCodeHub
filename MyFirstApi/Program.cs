@@ -42,19 +42,22 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
 var app = builder.Build();
-using (var scope = app.Services.CreateScope())
+
+using(var scope = app.Services.CreateScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    var dbcontext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
     try
     {
-        db.Database.Migrate();
+        dbcontext.Database.Migrate();   
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"Migration failed: {ex.Message}");
+
+        Console.WriteLine(ex.ToString());
     }
 }
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
